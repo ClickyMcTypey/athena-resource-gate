@@ -10,6 +10,10 @@ import { hubspotIntegration } from './integrations/hubspotIntegration.js';
 
 export const app = {
     init() {
+        if (state.hasInitialized) return;
+
+        state.hasInitialized = true;
+
         caseStudyModalService.bindEvents({
             beforeOpen() {
                 hubspotIntegration.moveForm();
@@ -38,6 +42,17 @@ export const app = {
 
         if (state.resourceType === 'casestudy') {
             hubspotIntegration.moveForm();
+            return;
+        }
+
+        if (state.resourceType === 'guide') {
+            /**
+             * No gate trimming.
+             * No modal.
+             * The actual move will happen again safely after HubSpot onFormReady.
+             */
+            hubspotIntegration.moveForm();
+            return;
         }
     },
 

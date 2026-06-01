@@ -9,86 +9,94 @@ import { leadMagnetService } from '../services/leadMagnetService.js';
 import { caseStudyModalService } from '../services/caseStudyModalService.js';
 
 export const hubspotIntegration = {
-  normalizeForm(formLike) {
-    const element = formLike?.[0] || formLike;
+    normalizeForm(formLike) {
+        const element = formLike?.[0] || formLike;
 
-    if (!(element instanceof HTMLElement)) {
-      logger.warn('Unable to normalize HubSpot form.', formLike);
-      return null;
-    }
+        if (!(element instanceof HTMLElement)) {
+            logger.warn('Unable to normalize HubSpot form.', formLike);
+            return null;
+        }
 
-    return element.closest('.hbspt-form') || element;
-  },
+        return element.closest('.hbspt-form') || element;
+    },
 
-  getFormMountTarget() {
-    if (state.resourceType === 'article') {
-      return document.querySelector(`.${config.classes.articleFormTarget}`);
-    }
+    getFormMountTarget() {
+        if (state.resourceType === 'article') {
+            return document.querySelector(`.${config.classes.articleFormTarget}`);
+        }
 
-    if (state.resourceType === 'casestudy') {
-      return document.querySelector(config.selectors.formTarget);
-    }
+        if (state.resourceType === 'casestudy') {
+            return document.querySelector(config.selectors.formTarget);
+        }
 
-    return null;
-  },
+        if (state.resourceType === 'guide') {
+            return document.querySelector(config.selectors.guideFormTarget);
+        }
 
-  moveForm() {
-    if (state.hasMovedForm) return;
+        return null;
+    },
 
-    const target = this.getFormMountTarget();
-    const formWrapper = state.formWrapper || document.querySelector('.hbspt-form');
+    moveForm() {
+        if (state.hasMovedForm) return;
 
-    if (!target || !formWrapper) {
-      logger.warn('Form mount target or HubSpot form not found.', {
-        target,
-        formWrapper,
-        resourceType: state.resourceType,
-      });
+        const target = this.getFormMountTarget();
+        const formWrapper = state.formWrapper || document.querySelector('.hbspt-form');
 
-      return;
-    }
+        if (!target || !formWrapper) {
+            logger.warn('Form mount target or HubSpot form not found.', {
+                target,
+                formWrapper,
+                resourceType: state.resourceType,
+            });
 
-    target.appendChild(formWrapper);
+            return;
+        }
 
-    state.formWrapper = formWrapper;
-    state.hasMovedForm = true;
+        target.appendChild(formWrapper);
 
-    logger.log('HubSpot form moved.');
-  },
+        state.formWrapper = formWrapper;
+        state.hasMovedForm = true;
 
-  onReady(formLike) {
-    const formWrapper = this.normalizeForm(formLike);
+        logger.log('HubSpot form moved.');
+    },
 
-    if (!formWrapper) return;
+    onReady(formLike) {
+        const formWrapper = this.normalizeForm(formLike);
 
-    state.formWrapper = formWrapper;
+        if (!formWrapper) return;
 
-    hdyhauService.bind(formWrapper);
-    hdyhauService.reset(formWrapper);
+        state.formWrapper = formWrapper;
 
-    leadMagnetService.applyToForm(formWrapper);
+        hdyhauService.bind(formWrapper);
+        hdyhauService.reset(formWrapper);
 
-    this.moveForm();
-  },
+        leadMagnetService.applyToForm(formWrapper);
 
-  onSubmitted() {
-    leadMagnetService.applyToForm(state.formWrapper);
+        this.moveForm();
+    },
 
-    if (state.resourceType === 'casestudy') {
-      caseStudyModalService.showSuccessMessage();
-      return;
-    }
+    onSubmitted() {
+        leadMagnetService.applyToForm(state.formWrapper);
 
-    if (state.resourceType === 'article') {
-      setCookie(
-        config.cookies.articleUnlock,
-        'true',
-        config.cookies.days
-      );
+        if (state.resourceType === 'casestudy') {
+            caseStudyModalService.showSuccessMessage();
+            return;
+        }
 
-      setTimeout(() => {
-        window.location.reload();
-      }, 300);
-    }
-  },
+        if (state.resourceType === 'guide') {
+            return;
+        }
+
+        if (state.resourceType === 'article') {
+            setCookie(
+                config.cookies.articleUnlock,
+                'true',
+                config.cookies.days
+            );
+
+            setTimeout(() => {
+                window.location.reload();
+            }, 300);
+        }
+    },
 };

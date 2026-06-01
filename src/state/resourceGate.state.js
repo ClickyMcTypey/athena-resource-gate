@@ -1,10 +1,12 @@
 export const resourceGateState = {
-  resourceType: null,
-  formWrapper: null,
+    hasInitialized: false,
 
-  hasMovedForm: false,
-  hasBoundOpenButtons: false,
-  hasBoundModalCloseEvents: false,
+    resourceType: null,
+    formWrapper: null,
 
-  boundForms: new WeakSet(),
+    hasMovedForm: false,
+    hasBoundOpenButtons: false,
+    hasBoundModalCloseEvents: false,
+
+    boundForms: new WeakSet(),
 };

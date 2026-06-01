@@ -5,9 +5,11 @@ export const resourceGateConfig = {
 
         article: '[contenttype="article"]',
         caseStudy: '[contenttype="casestudy"]',
+        guide: '[contenttype="guide"]',
 
         modal: '#resourcemodal',
         formTarget: '[data-resource-form-target]',
+        guideFormTarget: '#formcontainer',
 
         openFormButton: '[cmd="openform"]',
         closeFormButton: '[cmd="closeform"]',
@@ -33,15 +35,6 @@ export const resourceGateConfig = {
         leadMagnetContentType: 'leadmagnet_contenttype',
     },
 
-    hdyhauLabels: {
-        Podcast: 'Which podcast?',
-        Referral: "Referrer's name (first and last)",
-        Newsletter: 'Which newsletter?',
-        'Blog or Publication': 'Which website?',
-        Events: 'Which event did you attend?',
-        Other: 'Please specify:',
-    },
-
     fallbackValues: {
         hdyhauSecondary: 'athena20122740',
     },
@@ -51,5 +44,14 @@ export const resourceGateConfig = {
         caseStudySuccessSubtitle: "We'll get in touch with you shortly.",
     },
 
-    debug: true,
+    hdyhauLabels: {
+        Podcast: 'Which podcast?',
+        Referral: "Referrer's name (first and last)",
+        Newsletter: 'Which newsletter?',
+        'Blog or Publication': 'Which website?',
+        Events: 'Which event did you attend?',
+        Other: 'Please specify:',
+    },
+
+    debug: false,
 };
