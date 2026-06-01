@@ -1,10 +1,21 @@
 import { resourceGateState as state } from './state/resourceGate.state.js';
 
 import { logger } from './utils/logger.js';
+
 import { resourceService } from './services/resourceService.js';
+import { articleGateService } from './services/articleGateService.js';
+import { caseStudyModalService } from './services/caseStudyModalService.js';
+
+import { hubspotIntegration } from './integrations/hubspotIntegration.js';
 
 export const app = {
     init() {
+        caseStudyModalService.bindEvents({
+            beforeOpen() {
+                hubspotIntegration.moveForm();
+            },
+        });
+
         state.resourceType = resourceService.detectType();
 
         logger.log('app initialized');
@@ -14,21 +25,35 @@ export const app = {
         if (!state.resourceType) return;
 
         if (state.resourceType === 'article') {
-            logger.log('article page detected');
+            const gateStatus = articleGateService.init();
+
+            logger.log('article gate status:', gateStatus);
+
+            if (gateStatus === 'gated') {
+                hubspotIntegration.moveForm();
+            }
+
             return;
         }
 
         if (state.resourceType === 'casestudy') {
-            logger.log('case study page detected');
-            return;
+            hubspotIntegration.moveForm();
         }
     },
 
     onHubSpotReady(formLike) {
-        logger.log('HubSpot ready', formLike);
+        hubspotIntegration.onReady(formLike);
     },
 
     onHubSpotSubmitted() {
-        logger.log('HubSpot submitted');
+        hubspotIntegration.onSubmitted();
+    },
+
+    openCaseStudyModal() {
+        caseStudyModalService.open();
+    },
+
+    closeCaseStudyModal() {
+        caseStudyModalService.close();
     },
 };

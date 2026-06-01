@@ -1,46 +1,55 @@
 export const resourceGateConfig = {
-  selectors: {
-    container: '.resource-rtf',
-    marker: '#gater',
+    selectors: {
+        container: '.resource-rtf',
+        marker: '#gater',
 
-    article: '[contenttype="article"]',
-    caseStudy: '[contenttype="casestudy"]',
+        article: '[contenttype="article"]',
+        caseStudy: '[contenttype="casestudy"]',
 
-    modal: '#resourcemodal',
-    formTarget: '[data-resource-form-target]',
+        modal: '#resourcemodal',
+        formTarget: '[data-resource-form-target]',
 
-    openFormButton: '[cmd="openform"]',
-    closeFormButton: '[cmd="closeform"]',
+        openFormButton: '[cmd="openform"]',
+        closeFormButton: '[cmd="closeform"]',
 
-    resourceGreeter: '#resourcegreeter',
-    resourceGreeterSub: '#resourcegreetersub',
-  },
+        resourceGreeter: '#resourcegreeter',
+        resourceGreeterSub: '#resourcegreetersub',
+    },
 
-  classes: {
-    articleFormTarget: 'gater-after',
-    modalOpen: 'is-open',
-  },
+    classes: {
+        articleFormTarget: 'gater-after',
+        modalOpen: 'is-open',
+    },
 
-  cookies: {
-    articleUnlock: 'athn_res',
-    days: 7,
-  },
+    cookies: {
+        articleUnlock: 'athn_res',
+        days: 7,
+    },
 
-  hubspotFields: {
-    hdyhauPrimary: 'hdyhau_primary',
-    hdyhauSecondary: 'hdyhau_secondary',
-    leadMagnetContentId: 'leadmagnet_contentid',
-    leadMagnetContentType: 'leadmagnet_contenttype',
-  },
+    hubspotFields: {
+        hdyhauPrimary: 'hdyhau_primary',
+        hdyhauSecondary: 'hdyhau_secondary',
+        leadMagnetContentId: 'leadmagnet_contentid',
+        leadMagnetContentType: 'leadmagnet_contenttype',
+    },
 
-  fallbackValues: {
-    hdyhauSecondary: 'athena20122740',
-  },
+    hdyhauLabels: {
+        Podcast: 'Which podcast?',
+        Referral: "Referrer's name (first and last)",
+        Newsletter: 'Which newsletter?',
+        'Blog or Publication': 'Which website?',
+        Events: 'Which event did you attend?',
+        Other: 'Please specify:',
+    },
 
-  messages: {
-    caseStudySuccessTitle: 'Success',
-    caseStudySuccessSubtitle: "We'll get in touch with you shortly.",
-  },
+    fallbackValues: {
+        hdyhauSecondary: 'athena20122740',
+    },
 
-  debug: true,
+    messages: {
+        caseStudySuccessTitle: 'Success',
+        caseStudySuccessSubtitle: "We'll get in touch with you shortly.",
+    },
+
+    debug: true,
 };
