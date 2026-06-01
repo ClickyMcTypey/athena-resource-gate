@@ -40,8 +40,8 @@ export const resourceGateConfig = {
     },
 
     messages: {
-        caseStudySuccessTitle: 'Success',
-        caseStudySuccessSubtitle: "We'll get in touch with you shortly.",
+        resourceSuccessTitle: 'Success',
+        resourceSuccessSubtitle: "We'll get in touch with you shortly.",
     },
 
     hdyhauLabels: {
