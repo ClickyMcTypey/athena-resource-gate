@@ -1,0 +1,12 @@
+{
+  "name": "athena-resource-gate",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vite build"
+  },
+  "devDependencies": {
+    "vite": "^7.0.0"
+  }
+}
