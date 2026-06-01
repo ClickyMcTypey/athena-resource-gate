@@ -3,103 +3,88 @@ import { resourceGateState as state } from '../state/resourceGate.state.js';
 import { logger } from '../utils/logger.js';
 
 export const caseStudyModalService = {
-  open() {
-    const modal = document.querySelector(config.selectors.modal);
+    open() {
+        const modal = document.querySelector(config.selectors.modal);
 
-    if (!modal) {
-      logger.warn('Case study modal not found:', config.selectors.modal);
-      return;
-    }
+        if (!modal) {
+            logger.warn('Case study modal not found:', config.selectors.modal);
+            return;
+        }
 
-    modal.style.setProperty('display', 'flex', 'important');
-    modal.classList.add(config.classes.modalOpen);
-    modal.setAttribute('aria-hidden', 'false');
+        modal.style.setProperty('display', 'flex', 'important');
+        modal.classList.add(config.classes.modalOpen);
+        modal.setAttribute('aria-hidden', 'false');
 
-    logger.log('Case study modal opened.');
-  },
+        logger.log('Case study modal opened.');
+    },
 
-  close() {
-    const modal = document.querySelector(config.selectors.modal);
+    close() {
+        const modal = document.querySelector(config.selectors.modal);
 
-    if (!modal) {
-      logger.warn('Case study modal not found:', config.selectors.modal);
-      return;
-    }
+        if (!modal) {
+            logger.warn('Case study modal not found:', config.selectors.modal);
+            return;
+        }
 
-    modal.style.setProperty('display', 'none', 'important');
-    modal.classList.remove(config.classes.modalOpen);
-    modal.setAttribute('aria-hidden', 'true');
+        modal.style.setProperty('display', 'none', 'important');
+        modal.classList.remove(config.classes.modalOpen);
+        modal.setAttribute('aria-hidden', 'true');
 
-    logger.log('Case study modal closed.');
-  },
+        logger.log('Case study modal closed.');
+    },
 
-  showSuccessMessage() {
-    const greeter = document.querySelector(config.selectors.resourceGreeter);
-    const greeterSub = document.querySelector(config.selectors.resourceGreeterSub);
+    bindOpenEvents({ beforeOpen } = {}) {
+        if (state.hasBoundOpenButtons) return;
 
-    if (greeter) {
-      greeter.textContent = config.messages.caseStudySuccessTitle;
-    }
+        document.addEventListener('click', (event) => {
+            const button = event.target.closest(config.selectors.openFormButton);
 
-    if (greeterSub) {
-      greeterSub.textContent = config.messages.caseStudySuccessSubtitle;
-    }
+            if (!button) return;
 
-    logger.log('Case study success message shown.');
-  },
+            const isCaseStudyPage = document.querySelector(config.selectors.caseStudy);
 
-  bindOpenEvents({ beforeOpen } = {}) {
-    if (state.hasBoundOpenButtons) return;
+            if (!isCaseStudyPage) return;
 
-    document.addEventListener('click', (event) => {
-      const button = event.target.closest(config.selectors.openFormButton);
+            event.preventDefault();
 
-      if (!button) return;
+            state.resourceType = 'casestudy';
 
-      const isCaseStudyPage = document.querySelector(config.selectors.caseStudy);
+            if (typeof beforeOpen === 'function') {
+                beforeOpen();
+            }
 
-      if (!isCaseStudyPage) return;
+            this.open();
+        });
 
-      event.preventDefault();
+        state.hasBoundOpenButtons = true;
+    },
 
-      state.resourceType = 'casestudy';
+    bindCloseEvents() {
+        if (state.hasBoundModalCloseEvents) return;
 
-      if (typeof beforeOpen === 'function') {
-        beforeOpen();
-      }
+        document.addEventListener('click', (event) => {
+            const modal = document.querySelector(config.selectors.modal);
 
-      this.open();
-    });
+            if (!modal) return;
 
-    state.hasBoundOpenButtons = true;
-  },
+            const closeButton = event.target.closest(config.selectors.closeFormButton);
 
-  bindCloseEvents() {
-    if (state.hasBoundModalCloseEvents) return;
+            if (closeButton) {
+                event.preventDefault();
+                this.close();
+                return;
+            }
 
-    document.addEventListener('click', (event) => {
-      const modal = document.querySelector(config.selectors.modal);
+            if (event.target === modal) {
+                this.close();
+            }
+        });
 
-      if (!modal) return;
+        state.hasBoundModalCloseEvents = true;
+    },
 
-      const closeButton = event.target.closest(config.selectors.closeFormButton);
-
-      if (closeButton) {
-        event.preventDefault();
-        this.close();
-        return;
-      }
-
-      if (event.target === modal) {
-        this.close();
-      }
-    });
-
-    state.hasBoundModalCloseEvents = true;
-  },
-
-  bindEvents(options = {}) {
-    this.bindOpenEvents(options);
-    this.bindCloseEvents();
-  },
+    bindEvents(options = {}) {
+        this.bindOpenEvents(options);
+        this.bindCloseEvents();
+    },
 };
