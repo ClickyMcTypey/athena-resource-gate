@@ -1,0 +1,1 @@
+(function(){var e={init(){console.log(`[AthenaResourceGate] app initialized`)},onHubSpotReady(e){console.log(`[AthenaResourceGate] HubSpot ready`,e)},onHubSpotSubmitted(){console.log(`[AthenaResourceGate] HubSpot submitted`)}};window.AthenaResourceGate=e;function t(){e.init()}document.readyState===`loading`?document.addEventListener(`DOMContentLoaded`,t):t()})();
