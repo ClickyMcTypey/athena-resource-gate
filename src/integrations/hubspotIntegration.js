@@ -7,6 +7,7 @@ import { logger } from '../utils/logger.js';
 import { hdyhauService } from '../services/hdyhauService.js';
 import { leadMagnetService } from '../services/leadMagnetService.js';
 import { caseStudyModalService } from '../services/caseStudyModalService.js';
+import { resourceMessageService } from '../services/resourceMessageService.js';
 
 export const hubspotIntegration = {
     normalizeForm(formLike) {
@@ -79,11 +80,12 @@ export const hubspotIntegration = {
         leadMagnetService.applyToForm(state.formWrapper);
 
         if (state.resourceType === 'casestudy') {
-            caseStudyModalService.showSuccessMessage();
+            resourceMessageService.showSuccessMessage();
             return;
         }
 
         if (state.resourceType === 'guide') {
+            resourceMessageService.showSuccessMessage();
             return;
         }
 
