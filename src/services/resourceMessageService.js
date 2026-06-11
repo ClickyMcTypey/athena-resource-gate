@@ -16,4 +16,17 @@ export const resourceMessageService = {
 
         logger.log('Resource success message shown.');
     },
+
+    hideGuideFormContainer() {
+        const formContainer = document.querySelector(config.selectors.guideFormTarget);
+
+        if (!formContainer) {
+            logger.warn('Guide form container not found:', config.selectors.guideFormTarget);
+            return;
+        }
+
+        formContainer.style.display = 'none';
+
+        logger.log('Guide form container hidden.');
+    },
 };

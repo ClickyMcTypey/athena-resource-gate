@@ -14,6 +14,7 @@ export const resourceGateConfig = {
         openFormButton: '[cmd="openform"]',
         closeFormButton: '[cmd="closeform"]',
 
+        guideFormTarget: '#formcontainer',
         resourceGreeter: '#resourcegreeter',
         resourceGreeterSub: '#resourcegreetersub',
     },

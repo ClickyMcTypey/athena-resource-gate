@@ -86,6 +86,7 @@ export const hubspotIntegration = {
 
         if (state.resourceType === 'guide') {
             resourceMessageService.showSuccessMessage();
+            resourceMessageService.hideGuideFormContainer();
             return;
         }
 
