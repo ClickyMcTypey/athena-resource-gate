@@ -21,6 +21,32 @@ export const hubspotIntegration = {
         return element.closest('.hbspt-form') || element;
     },
 
+    bindBeforeSubmit(formWrapper) {
+        const form =
+            formWrapper?.querySelector('form') ||
+            formWrapper?.closest('form') ||
+            document.querySelector('.hbspt-form form');
+
+        if (!form) {
+            logger.warn('Unable to bind before-submit lead magnet check. Form not found.');
+            return;
+        }
+
+        if (form.dataset.resourceGateLeadMagnetBound === 'true') return;
+
+        form.addEventListener(
+            'submit',
+            () => {
+                leadMagnetService.applyToForm(formWrapper);
+            },
+            true
+        );
+
+        form.dataset.resourceGateLeadMagnetBound = 'true';
+
+        logger.log('Before-submit lead magnet check bound.');
+    },
+
     getFormMountTarget() {
         if (state.resourceType === 'article') {
             return document.querySelector(`.${config.classes.articleFormTarget}`);
@@ -71,9 +97,10 @@ export const hubspotIntegration = {
         hdyhauService.bind(formWrapper);
         hdyhauService.reset(formWrapper);
 
-        leadMagnetService.applyToForm(formWrapper);
-
         this.moveForm();
+
+        leadMagnetService.applyToFormWithRetry(formWrapper);
+        this.bindBeforeSubmit(formWrapper);
     },
 
     onSubmitted() {

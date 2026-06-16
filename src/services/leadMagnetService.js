@@ -4,17 +4,25 @@ import { setFieldValue } from '../utils/dom.js';
 import { logger } from '../utils/logger.js';
 
 export const leadMagnetService = {
-  applyToForm(formWrapper) {
-    if (!formWrapper) return;
+  findField(formWrapper, fieldName) {
+    return (
+      formWrapper?.querySelector(`[name="${fieldName}"]`) ||
+      document.querySelector(`.hbspt-form [name="${fieldName}"]`) ||
+      document.querySelector(`[name="${fieldName}"]`)
+    );
+  },
 
+  applyToForm(formWrapper) {
     const meta = resourceService.getMeta();
 
-    const contentIdField = formWrapper.querySelector(
-      `[name="${config.hubspotFields.leadMagnetContentId}"]`
+    const contentIdField = this.findField(
+      formWrapper,
+      config.hubspotFields.leadMagnetContentId
     );
 
-    const contentTypeField = formWrapper.querySelector(
-      `[name="${config.hubspotFields.leadMagnetContentType}"]`
+    const contentTypeField = this.findField(
+      formWrapper,
+      config.hubspotFields.leadMagnetContentType
     );
 
     if (contentIdField && meta.contentId) {
@@ -28,8 +36,42 @@ export const leadMagnetService = {
     logger.log('lead magnet fields applied:', {
       contentId: meta.contentId,
       contentType: meta.contentType,
-      hasContentIdField: Boolean(contentIdField),
-      hasContentTypeField: Boolean(contentTypeField),
+      contentIdFieldFound: Boolean(contentIdField),
+      contentTypeFieldFound: Boolean(contentTypeField),
+      contentIdFieldValue: contentIdField?.value || '',
+      contentTypeFieldValue: contentTypeField?.value || '',
     });
+
+    return {
+      contentIdField,
+      contentTypeField,
+      contentIdFilled: Boolean(contentIdField?.value),
+      contentTypeFilled: Boolean(contentTypeField?.value),
+    };
+  },
+
+  applyToFormWithRetry(formWrapper, attempts = 15) {
+    let count = 0;
+
+    const interval = setInterval(() => {
+      count++;
+
+      const result = this.applyToForm(formWrapper);
+
+      const done =
+        result.contentIdFilled &&
+        result.contentTypeFilled;
+
+      if (done || count >= attempts) {
+        clearInterval(interval);
+
+        logger.log('lead magnet retry finished:', {
+          attemptsUsed: count,
+          done,
+          contentIdFilled: result.contentIdFilled,
+          contentTypeFilled: result.contentTypeFilled,
+        });
+      }
+    }, 200);
   },
 };
