@@ -8,7 +8,11 @@ import { caseStudyModalService } from './services/caseStudyModalService.js';
 
 import { hubspotIntegration } from './integrations/hubspotIntegration.js';
 
+import { leadMagnetService } from './services/leadMagnetService.js';
+
 export const app = {
+    state,
+
     init() {
         if (state.hasInitialized) return;
 
@@ -21,6 +25,13 @@ export const app = {
         });
 
         state.resourceType = resourceService.detectType();
+
+        /**
+         * Capture this early.
+         * This must happen before articleGateService.init()
+         * because article gating can remove DOM content after #gater.
+         */
+        resourceService.captureMeta();
 
         logger.log('app initialized');
         logger.log('resource type:', state.resourceType);
@@ -46,14 +57,13 @@ export const app = {
         }
 
         if (state.resourceType === 'guide') {
-            /**
-             * No gate trimming.
-             * No modal.
-             * The actual move will happen again safely after HubSpot onFormReady.
-             */
             hubspotIntegration.moveForm();
             return;
         }
+    },
+
+    debugLeadMagnet() {
+        return leadMagnetService.applyToForm(state.formWrapper);
     },
 
     onHubSpotReady(formLike) {

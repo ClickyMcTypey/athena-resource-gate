@@ -23,13 +23,24 @@ export const resourceService = {
         return null;
     },
 
-    readMetaFromDom() {
-        const contentIdEl = document.querySelector('[contentid]');
-        const contentTypeEl = document.querySelector('[contenttype]');
+    getFirstAttributeValue(attributeName) {
+        const elements = Array.from(document.querySelectorAll(`[${attributeName}]`));
 
+        const match = elements.find((element) => {
+            const value = element.getAttribute(attributeName);
+            return value && value.trim();
+        });
+
+        return match?.getAttribute(attributeName)?.trim() || '';
+    },
+
+    readMetaFromDom() {
         return {
-            contentId: contentIdEl?.getAttribute('contentid') || '',
-            contentType: contentTypeEl?.getAttribute('contenttype') || state.resourceType || '',
+            contentId: this.getFirstAttributeValue('contentid'),
+            contentType:
+                this.getFirstAttributeValue('contenttype') ||
+                state.resourceType ||
+                '',
         };
     },
 
