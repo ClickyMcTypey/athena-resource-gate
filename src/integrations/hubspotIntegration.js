@@ -102,7 +102,7 @@ export const hubspotIntegration = {
         leadMagnetService.applyToFormWithRetry(formWrapper);
         this.bindBeforeSubmit(formWrapper);
     },
-
+    
     onSubmitted() {
         leadMagnetService.applyToForm(state.formWrapper);
 
