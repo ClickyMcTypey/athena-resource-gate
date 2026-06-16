@@ -25,12 +25,11 @@ export const leadMagnetService = {
       setFieldValue(contentTypeField, meta.contentType);
     }
 
-    if (!contentIdField) {
-      logger.warn('HubSpot field not found:', config.hubspotFields.leadMagnetContentId);
-    }
-
-    if (!contentTypeField) {
-      logger.warn('HubSpot field not found:', config.hubspotFields.leadMagnetContentType);
-    }
+    logger.log('lead magnet fields applied:', {
+      contentId: meta.contentId,
+      contentType: meta.contentType,
+      hasContentIdField: Boolean(contentIdField),
+      hasContentTypeField: Boolean(contentTypeField),
+    });
   },
 };

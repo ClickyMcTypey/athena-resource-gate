@@ -23,32 +23,25 @@ export const resourceService = {
         return null;
     },
 
-    getContentId() {
-        const element = document.querySelector('[contentid]');
+    readMetaFromDom() {
+        const contentIdEl = document.querySelector('[contentid]');
+        const contentTypeEl = document.querySelector('[contenttype]');
 
-        if (!element) {
-            logger.warn('Missing [contentid] attribute.');
-            return '';
-        }
-
-        return element.getAttribute('contentid') || '';
+        return {
+            contentId: contentIdEl?.getAttribute('contentid') || '',
+            contentType: contentTypeEl?.getAttribute('contenttype') || state.resourceType || '',
+        };
     },
 
-    getContentType() {
-        const element = document.querySelector('[contenttype]');
+    captureMeta() {
+        state.resourceMeta = this.readMetaFromDom();
 
-        if (!element) {
-            logger.warn('Missing [contenttype] attribute. Falling back to state.resourceType.');
-            return state.resourceType || '';
-        }
+        logger.log('resource meta captured:', state.resourceMeta);
 
-        return element.getAttribute('contenttype') || state.resourceType || '';
+        return state.resourceMeta;
     },
 
     getMeta() {
-        return {
-            contentId: this.getContentId(),
-            contentType: this.getContentType(),
-        };
+        return state.resourceMeta;
     },
 };
